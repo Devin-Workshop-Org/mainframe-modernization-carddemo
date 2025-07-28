@@ -2,43 +2,129 @@
 
 - [CardDemo -- Mainframe CardDemo Application](#carddemo----mainframe-card-demo-application)
 - [Description](#description)
-- [Technologies used](#technologies-used)
-- [Installation on the mainframe](#installation-on-the-mainframe)
+  - [Target Audiences](#target-audiences)
+  - [Core Capabilities](#core-capabilities)
+  - [Modernization Learning Objectives](#modernization-learning-objectives)
+- [Technologies Used](#technologies-used)
+  - [Core Mainframe Technologies](#core-mainframe-technologies)
+  - [Integration Architecture](#integration-architecture)
+- [Application Architecture](#application-architecture)
+  - [System Overview](#system-overview)
+  - [Transaction Processing Flow](#transaction-processing-flow)
+  - [Communication Architecture](#communication-architecture)
+  - [Data Architecture](#data-architecture)
+- [Installation on the Mainframe](#installation-on-the-mainframe)
 - [Application Details](#application-details)
+  - [User Types and Access Control](#user-types-and-access-control)
   - [User Functions](#user-functions)
   - [Admin Functions](#admin-functions)
-  - [Application Inventory](#application-inventory)
-    - [**Online**](#online)
-    - [**Batch**](#batch)
-  - [Application Screens](#application-screens)
-    - [**Signon Screen**](#signon-screen)
-    - [**Main Menu**](#main-menu)
-    - [**Admin Menu**](#admin-menu)
+  - [System Components](#system-components)
+    - [Online Transaction Processing (CICS)](#online-transaction-processing-cics)
+    - [Batch Processing (JCL)](#batch-processing-jcl)
+  - [User Interface Architecture](#user-interface-architecture)
+    - [BMS Design Patterns](#bms-basic-mapping-support-design-patterns)
+    - [Screen Flow Architecture](#screen-flow-architecture)
+    - [Screen Development Patterns](#screen-development-patterns)
+- [Running Full Batch](#running-full-batch)
+- [Modernization Use Cases](#modernization-use-cases)
+  - [Legacy Code Patterns for Analysis](#legacy-code-patterns-for-analysis)
+  - [Transformation Opportunities](#transformation-opportunities)
+  - [Modernization Strategies Demonstrated](#modernization-strategies-demonstrated)
+- [Development Patterns](#development-patterns)
+  - [COBOL Programming Patterns](#cobol-programming-patterns)
+  - [CICS Programming Model](#cics-programming-model)
+  - [Data Management Patterns](#data-management-patterns)
 - [Support](#support)
 - [Roadmap](#roadmap)
+  - [Planned Enhancements](#planned-enhancements)
 - [Contributing](#contributing)
 - [License](#license)
-- [Project status](#project-status)
+- [Project Status](#project-status)
 
 <br/>
 
 ## Description
-CardDemo is a Mainframe application that provides an example of mainframe modernization use-cases such as discovery, migration, modernization, performance test, augmentation, service enablement, service extraction, test creation, test harness, etc.
 
-Note that the intent of this application is to provide mainframe coding scenarios to excercise analysis, transformation and migration tooling. So, the coding style is not uniform across the application
+CardDemo is a comprehensive mainframe credit card management application designed to demonstrate real-world mainframe modernization use cases. Built using traditional mainframe technologies including COBOL, CICS, VSAM, and JCL, this application serves as a practical learning resource for organizations looking to discover, migrate, modernize, or integrate legacy mainframe systems with modern cloud infrastructure.
+
+### Target Audiences
+
+**Developers and Architects**: Learn mainframe programming patterns, CICS transaction processing, VSAM data management, and batch processing workflows that are common in enterprise mainframe environments.
+
+**Modernization Teams**: Analyze legacy code patterns, understand transformation challenges, and explore modernization strategies including service extraction, API enablement, and cloud migration approaches.
+
+**Business Users**: Understand mainframe application functionality through a familiar credit card management domain with features like account management, transaction processing, and statement generation.
+
+### Core Capabilities
+
+The CardDemo application demonstrates a complete mainframe ecosystem with:
+
+- **Online Transaction Processing**: Real-time user interactions through CICS for account management, card operations, and transaction processing
+- **Batch Processing**: Background jobs for daily transaction posting, interest calculations, statement generation, and data maintenance
+- **Data Management**: Comprehensive VSAM file structures for customers, accounts, cards, transactions, and cross-reference data
+- **User Security**: Role-based access control with separate user and administrator functions
+- **Reporting**: Statement generation in both plain text and HTML formats
+
+### Modernization Learning Objectives
+
+The application intentionally includes diverse coding styles and patterns to exercise analysis and transformation tooling. Key modernization scenarios demonstrated include:
+
+- Legacy COBOL program structures and data handling patterns
+- CICS transaction processing and program communication
+- VSAM file organization and data access patterns
+- JCL batch processing workflows and job dependencies
+- Mainframe-specific programming constructs and control flow
+- Integration points suitable for service extraction and API development
+
+Note that the coding style varies across the application to provide realistic scenarios for modernization tooling analysis and transformation exercises.
 
 <br/>
 
-## Technologies used
-1. COBOL
-2. CICS
-3. VSAM
-4. JCL
-5. RACF
+## Technologies Used
+
+### Core Mainframe Technologies
+
+**1. COBOL (Common Business-Oriented Language)**
+- Primary programming language for all business logic
+- Online programs handle CICS transaction processing and user interactions
+- Batch programs manage data processing, calculations, and reporting
+- Demonstrates traditional mainframe programming patterns and data structures
+
+**2. CICS (Customer Information Control System)**
+- Transaction processing monitor managing online user interactions
+- Handles screen management through BMS (Basic Mapping Support)
+- Provides program-to-program communication via COMMAREA
+- Manages concurrent user sessions and transaction integrity
+
+**3. VSAM (Virtual Storage Access Method)**
+- Primary data storage using Key Sequenced Data Sets (KSDS)
+- Indexed file organization for efficient data access
+- Cross-reference files linking customers, accounts, and cards
+- Supports both online transaction access and batch processing
+
+**4. JCL (Job Control Language)**
+- Batch job execution and workflow management
+- Data loading, transformation, and maintenance operations
+- File backup and recovery procedures
+- Integration between online and batch processing components
+
+**5. RACF (Resource Access Control Facility)**
+- Security framework for user authentication and authorization
+- Role-based access control (Admin vs. Regular users)
+- Resource protection and audit capabilities
+
+### Integration Architecture
+
+The technologies work together to create a complete mainframe application ecosystem:
+- **COBOL + CICS**: Online transaction processing with real-time user interactions
+- **COBOL + JCL**: Batch processing for background operations and data maintenance
+- **VSAM**: Shared data layer accessible by both online and batch components
+- **BMS**: Screen definition and management for user interface
+- **RACF**: Security layer protecting all system resources
 
 <br/>
 
-## Installation on the mainframe 
+## Installation on the Mainframe 
 
 To install this repository on the mainframe please follow the following steps
 
@@ -51,7 +137,7 @@ To install this repository on the mainframe please follow the following steps
       
 3. Use data for testing using either of the below approaches
 
-   ** Use the supplied sample data**
+   **Use the supplied sample data**
    
       * Upload the sample data provided in the main/-/data/EBCDIC/ folder to the mainframe. Ensure that you use transfer mode binary (e.g.)
 
@@ -89,27 +175,30 @@ To install this repository on the mainframe please follow the following steps
          | DEFGDGB  | Defines GDG Base                                    |
 
 
-4. Compile the Programs. 
+4. **Compile the Programs**
    
-   You should use the compile process followed by your mainframe shopfloor
+   Use the compilation process standard for your mainframe environment. Sample compilation JCLs are provided in the `samples/` directory to help you create appropriate build procedures for your system.
    
-   We have however provided some sample JCLs in the samples folder in git to help you craft the JCL   
+   **Compilation Dependencies**:
+   - COBOL compiler (Enterprise COBOL recommended)
+   - CICS preprocessor for online programs
+   - BMS assembler for mapset compilation
+   - Appropriate load library definitions   
 
-5. Create resources in the CARDDEMO group in CICS
+5. **Create CICS Resources**
    
-   You have 2 options
+   Configure the CARDDEMO resource group in your CICS region. Update High Level Qualifiers (HLQs) in all definitions to match your environment.
    
-   Be sure to edit the HLQs in the below documents as required before you do the definition
+   **Option 1 (Recommended): Use DFHCSDUP**
    
-   * (Preferred) . Use the DFHCSDUP JCL that the resources required by the application
-
-      The resources required are in the CSD file provided in the CSD folder
-       
-      * Group CARDDEMO
-      * Mapsets
-      * Transactions
-      * Maps
-      * Files
+   Execute the DFHCSDUP JCL to install all required resources from the provided CSD definitions:
+   
+   **Resource Groups**:
+   - **CARDDEMO Group**: Main application resource group
+   - **Mapsets**: BMS mapset definitions for all screens
+   - **Transactions**: Transaction definitions with program associations
+   - **Programs**: COBOL program definitions and load library references
+   - **Files**: VSAM file definitions and access permissions
       
    * Use the CEDA transaction to execute the commands in the above listing
    
@@ -142,14 +231,24 @@ To install this repository on the mainframe please follow the following steps
       CEMT SET PROG(COCRDUP) NEWCOPY
       CEMT SET PROG(COCRDUPC) NEWCOPY  
       ```
-6. Enjoy the demo
+6. **Access the Application**
 
-   * For online functions : Start the CardDemo application using the CC00 transaction
-     - Enter userid ADMIN001 and the initially configured password PASSWORD to manage users
-     - Enter userid USER0001 and the initially configured password PASSWORD to access back office functions
-   * For batch            : See the instructions for running full batch below.
+   **Online Functions**:
+   - Start CardDemo using transaction `CC00` (Signon Screen)
+   - **Administrator Access**: 
+     - User ID: `ADMIN001`
+     - Password: `PASSWORD`
+     - Functions: User management, system administration
+   - **Regular User Access**:
+     - User ID: `USER0001` 
+     - Password: `PASSWORD`
+     - Functions: Account management, transactions, bill payment
+   
+   **Batch Processing**: 
+   - See [Running Full Batch](#running-full-batch) section for complete batch execution procedures
+   - Execute jobs in the specified sequence for proper data integrity
 
-## Running full batch 
+## Running Full Batch 
    
   * Execute the following JCLs in order
 
@@ -174,14 +273,70 @@ To install this repository on the mainframe please follow the following steps
     | OPENFIL  | Makes files available to CICS                       |
 <br/>
 
+## Application Architecture
+
+### System Overview
+
+CardDemo implements a traditional mainframe three-tier architecture with presentation, business logic, and data layers clearly separated:
+
+**Presentation Layer**: BMS (Basic Mapping Support) maps define screen layouts and user interaction patterns. Each screen is defined by a mapset containing field definitions, positioning, and attributes.
+
+**Business Logic Layer**: COBOL programs handle all business processing, divided into online transaction programs (CICS) and batch processing programs (JCL). Programs communicate through standardized COMMAREA structures.
+
+**Data Layer**: VSAM files provide persistent storage with indexed access. Cross-reference files maintain relationships between entities, enabling efficient data retrieval and integrity.
+
+### Transaction Processing Flow
+
+1. **User Authentication**: Login screen (COSGN00C) validates credentials against USRSEC file
+2. **Menu Navigation**: Main menu (COMEN01C) or Admin menu (COADM01C) based on user type
+3. **Function Execution**: Specific transaction programs handle business operations
+4. **Data Access**: Programs read/write VSAM files through standardized I/O operations
+5. **Screen Updates**: BMS maps format and display results to users
+
+### Communication Architecture
+
+Programs communicate through the CARDDEMO-COMMAREA structure containing:
+- Navigation context (from/to program and transaction IDs)
+- User session information (user ID, type, authentication status)
+- Business data (customer, account, card information)
+- Program state management (entry/reentry context)
+
+### Data Architecture
+
+**Master Files**:
+- CUSTDATA: Customer personal and contact information
+- ACCTDATA: Account details, balances, and status
+- CARDDATA: Credit card information and limits
+
+**Transaction Files**:
+- TRANSACT: Posted transaction records
+- DALYTRAN: Daily transactions pending posting
+
+**Reference Files**:
+- CARDXREF: Links cards to accounts and customers
+- USRSEC: User security and authentication data
+- DISCGRP, TRANCATG, TRANTYPE: Reference data for transaction processing
+
 ## Application Details 
-The CardDemo is a Credit Card management application, built primarily using COBOL programming language. The application has various functions that allows users to manage Account, Credit card, Transaction and Bill payment. 
 
-There are 2 types of users:
-* Regular User
-* Admin User
+CardDemo is a comprehensive credit card management application built using traditional mainframe technologies. The application provides complete lifecycle management for credit card operations including customer onboarding, account management, transaction processing, and statement generation.
 
-The Regular user can perform the user functions and the Admin users can only perform Admin functions.
+### User Types and Access Control
+
+**Regular Users**: 
+- View account information and balances
+- Manage credit card details and limits
+- View transaction history and details
+- Process bill payments
+- Generate and view statements
+
+**Administrative Users**:
+- Manage user accounts (create, update, delete users)
+- Access administrative functions and reports
+- Perform system maintenance operations
+- Monitor application usage and performance
+
+Access control is enforced through the USRSEC file with role-based permissions validated at login and maintained throughout the user session.
 
 <br/>
 
@@ -197,70 +352,194 @@ The Regular user can perform the user functions and the Admin users can only per
 
 <br/>
 
-### Application Inventory
+### System Components
 
-#### **Online**
+#### **Online Transaction Processing (CICS)**
 
-| Transaction |      | BMS Map | Program  | Function            |
-| :---------- | :--- | :------ | :------- | :------------------ |
-| CC00        |      | COSGN00 | COSGN00C | Signon Screen       |
-| CM00        |      | COMEN01 | COMEN01C | Main Menu           |
-|             | CAVW | COACTVW | COACTVWC | Account View        |
-|             | CAUP | COACTUP | COACTUPC | Account Update      |
-|             | CCLI | COCRDLI | COCRDLIC | Credit Card List    |
-|             | CCDL | COCRDSL | COCRDSLC | Credit Card View    |
-|             | CCUP | COCRDUP | COCRDUPC | Credit Card Update  |
-|             | CT00 | COTRN00 | COTRN00C | Transaction List    |
-|             | CT01 | COTRN01 | COTRN01C | Transaction View    |
-|             | CT02 | COTRN02 | COTRN02C | Transaction Add     |
-|             | CR00 | CORPT00 | CORPT00C | Transaction Reports |
-|             | CB00 | COBIL00 | COBIL00C | Bill Payment        |
-| CA00        |      | COADM01 | COADM01C | Admin Menu          |
-|             | CU00 | COUSR00 | COUSR00C | List Users          |
-|             | CU01 | COUSR01 | COUSR01C | Add User            |
-|             | CU02 | COUSR02 | COUSR02C | Update User         |
-|             | CU03 | COUSR03 | COUSR03C | Delete User         |
+**Authentication and Navigation**:
+| Transaction | BMS Map | Program  | Function | Description |
+| :---------- | :------ | :------- | :------- | :---------- |
+| CC00        | COSGN00 | COSGN00C | User Authentication | Validates user credentials against USRSEC file, determines user type, and routes to appropriate menu |
+| CM00        | COMEN01 | COMEN01C | Main Menu | Primary navigation for regular users with dynamic menu generation based on user permissions |
+| CA00        | COADM01 | COADM01C | Admin Menu | Administrative functions menu with elevated privilege operations |
 
-#### **Batch**
+**Account Management**:
+| Transaction | BMS Map | Program  | Function | Description |
+| :---------- | :------ | :------- | :------- | :---------- |
+| CAVW        | COACTVW | COACTVWC | Account View | Display account details, balances, and status information with real-time data access |
+| CAUP        | COACTUP | COACTUPC | Account Update | Modify account information with validation and audit trail capabilities |
 
-| Job      | Program  | Function                                   |
-| :------- | :------- | :----------------------------------------- |
-| DUSRSECJ | IEBGENER | Initial Load of User security file         |
-| DEFGDGB  | IDCAMS   | Setup GDG Bases                            | 
-| ACCTFILE | IDCAMS   | Refresh Account Master                     |
-| CARDFILE | IDCAMS   | Refresh Card Master                        |
-| CUSTFILE | IDCAMS   | Refresh Customer Master                    |
-| DISCGRP  | IDCAMS   | Load Disclosure Group File                 |
-| TRANFILE | IDCAMS   | Load Transaction Master file               |
-| TRANCATG | IDCAMS   | Load Transaction category types            |
-| TRANTYPE | IDCAMS   | Load Transaction type file                 |
-| XREFFILE | IDCAMS   | Account, Card and Customer cross reference |
-| CLOSEFIL | IEFBR14  | Close VSAM files in CICS                   |
-| TCATBALF | IDCAMS   | Refresh Transaction Category Balance       |
-| TRANBKP  | IDCAMS   | Refresh Transaction Master                 |
-| POSTTRAN | CBTRN02C | Transaction processing job                 |
-| TRANIDX  | IDCAMS   | Define AIX for transaction file            |
-| OPENFIL  | IEFBR14  | Open files in CICS                         |
-| INTCALC  | CBACT04C | Run interest calculations                  |
-| COMBTRAN | SORT     | Combine transaction files                  |
-| CREASTMT | CBSTM03A | Produce transaction statement              |
+**Credit Card Operations**:
+| Transaction | BMS Map | Program  | Function | Description |
+| :---------- | :------ | :------- | :------- | :---------- |
+| CCLI        | COCRDLI | COCRDLIC | Card List | Display all cards associated with customer accounts with filtering options |
+| CCDL        | COCRDSL | COCRDSLC | Card Details | View detailed card information including limits, status, and transaction summary |
+| CCUP        | COCRDUP | COCRDUPC | Card Update | Modify card details, limits, and status with business rule validation |
+
+**Transaction Processing**:
+| Transaction | BMS Map | Program  | Function | Description |
+| :---------- | :------ | :------- | :------- | :---------- |
+| CT00        | COTRN00 | COTRN00C | Transaction List | Browse transaction history with search and filter capabilities |
+| CT01        | COTRN01 | COTRN01C | Transaction View | Display detailed transaction information including merchant data and processing status |
+| CT02        | COTRN02 | COTRN02C | Transaction Add | Create new transactions with validation against account limits and card status |
+
+**Reporting and Payments**:
+| Transaction | BMS Map | Program  | Function | Description |
+| :---------- | :------ | :------- | :------- | :---------- |
+| CR00        | CORPT00 | CORPT00C | Reports | Generate various transaction and account reports with flexible date ranges |
+| CB00        | COBIL00 | COBIL00C | Bill Payment | Process payments against account balances with immediate posting |
+
+**User Administration**:
+| Transaction | BMS Map | Program  | Function | Description |
+| :---------- | :------ | :------- | :------- | :---------- |
+| CU00        | COUSR00 | COUSR00C | List Users | Display all system users with role and status information |
+| CU01        | COUSR01 | COUSR01C | Add User | Create new user accounts with role assignment and security setup |
+| CU02        | COUSR02 | COUSR02C | Update User | Modify user information, roles, and security settings |
+| CU03        | COUSR03 | COUSR03C | Delete User | Remove user accounts with proper security validation |
+
+#### **Batch Processing (JCL)**
+
+**Data Management and Setup**:
+| Job      | Program  | Function | Description |
+| :------- | :------- | :------- | :---------- |
+| DUSRSECJ | IEBGENER | User Security Setup | Initialize USRSEC file with default admin and user accounts |
+| DEFGDGB  | IDCAMS   | GDG Base Definition | Setup Generation Data Groups for backup and historical data management |
+| CLOSEFIL | IEFBR14  | File Closure | Close VSAM files in CICS region before batch processing |
+| OPENFIL  | IEFBR14  | File Opening | Make VSAM files available to CICS after batch processing |
+
+**Master Data Loading**:
+| Job      | Program  | Function | Description |
+| :------- | :------- | :------- | :---------- |
+| ACCTFILE | IDCAMS   | Account Master Load | Load account data from flat files to VSAM with validation and error handling |
+| CARDFILE | IDCAMS   | Card Master Load | Load credit card data with account linkage validation |
+| CUSTFILE | IDCAMS   | Customer Master Load | Load customer demographic and contact information |
+| XREFFILE | IDCAMS   | Cross-Reference Load | Load card-to-account-to-customer relationships for efficient data access |
+
+**Reference Data Management**:
+| Job      | Program  | Function | Description |
+| :------- | :------- | :------- | :---------- |
+| DISCGRP  | IDCAMS   | Disclosure Groups | Load regulatory disclosure group definitions |
+| TRANCATG | IDCAMS   | Transaction Categories | Load transaction category types for classification |
+| TRANTYPE | IDCAMS   | Transaction Types | Load transaction type definitions and processing rules |
+| TCATBALF | IDCAMS   | Category Balances | Load transaction category balance tracking data |
+
+**Transaction Processing Workflow**:
+| Job      | Program  | Function | Description |
+| :------- | :------- | :------- | :---------- |
+| TRANFILE | IDCAMS   | Transaction Master Load | Initialize transaction file structure |
+| TRANBKP  | IDCAMS   | Transaction Backup | Create backup copies of transaction data before processing |
+| POSTTRAN | CBTRN02C | Daily Transaction Posting | Process daily transactions, validate against accounts, update balances |
+| COMBTRAN | SORT     | Transaction Consolidation | Combine and sort transaction files for reporting |
+| INTCALC  | CBACT04C | Interest Calculation | Calculate and post interest charges to accounts |
+
+**Reporting and Indexing**:
+| Job      | Program  | Function | Description |
+| :------- | :------- | :------- | :---------- |
+| CREASTMT | CBSTM03A | Statement Generation | Generate customer statements in text and HTML formats |
+| TRANIDX  | IDCAMS   | Transaction Indexing | Define alternate indexes for efficient transaction file access |
+
+**Batch Processing Dependencies**:
+
+The batch jobs follow a specific execution sequence to maintain data integrity:
+
+1. **Setup Phase**: 
+   ```
+   CLOSEFIL → ACCTFILE → CARDFILE → CUSTFILE → XREFFILE → OPENFIL
+   ```
+
+2. **Daily Processing Cycle**: 
+   ```
+   POSTTRAN → INTCALC → COMBTRAN → CREASTMT
+   ```
+
+3. **Maintenance Operations**: 
+   ```
+   TRANBKP → TRANIDX → Performance optimization
+   ```
+
+**Critical Dependencies**:
+- Files must be closed in CICS before batch processing
+- Master data loading must complete before transaction processing
+- Transaction posting must precede interest calculations
+- Statement generation requires completed transaction processing
 
 <br/>
 
-### Application Screens
+### User Interface Architecture
 
-#### **Signon Screen**
+#### **BMS (Basic Mapping Support) Design Patterns**
+
+The application uses BMS mapsets to define screen layouts and user interactions. Each screen follows consistent design patterns:
+
+**Screen Header**: Standard header with transaction ID, program name, current date/time, and system identification
+**Navigation Area**: Function key assignments and menu options
+**Data Entry Fields**: Input fields with validation attributes and field-level help
+**Message Area**: Error messages, confirmations, and user guidance
+**Status Information**: User context, session information, and processing status
+
+#### **Screen Flow Architecture**
+
+**Authentication Flow**:
+- **Signon Screen (COSGN00)**: User authentication with credential validation
+- **Role-based Routing**: Automatic navigation to appropriate menu based on user type
+- **Session Management**: Maintains user context throughout the session
+
+**Main Application Screens**:
+
+**Signon Screen (CC00 - COSGN00)**
+- User ID and password entry with field-level validation
+- Security integration with USRSEC file for authentication
+- Automatic routing to Main Menu (CM00) or Admin Menu (CA00) based on user role
+- Error handling for invalid credentials and account lockout
 
 ![Alt text](./diagrams/Signon-Screen.png?raw=true "Signon Screen")
 
-
-#### **Main Menu**
+**Main Menu (CM00 - COMEN01)**
+- Dynamic menu generation based on user permissions
+- Numbered option selection with validation
+- Context-sensitive help and navigation
+- Integration with all user-accessible functions
 
 ![Alt text](./diagrams/Main-Menu.png?raw=true "Main Menu")
 
-#### **Admin Menu**
+**Admin Menu (CA00 - COADM01)**
+- Administrative function access with elevated privileges
+- User management operations (create, update, delete users)
+- System administration and maintenance functions
+- Audit trail and security logging
 
 ![Alt text](./diagrams/Admin-Menu.png?raw=true "Admin Menu")
+
+#### **Screen Development Patterns**
+
+**BMS Map Structure**: Each screen consists of:
+- **Mapset Definition** (.bms file): Field positions, attributes, colors, and layout
+- **COBOL Program** (.cbl file): Business logic, validation, and data processing
+- **Copybook Integration**: Shared data structures and communication areas
+
+**Field Attributes**: Standardized DFHMDF attributes:
+- **ASKIP**: Protected display-only fields
+- **UNPROT**: User input fields with validation
+- **FSET**: Fields that retain data across screen refreshes
+- **BRT/NORM**: Highlighting for emphasis and error indication
+
+**Error Handling Patterns**:
+- Standardized error message area at bottom of screen
+- Field-level cursor positioning for validation errors
+- Color coding (RED for errors, GREEN for success, YELLOW for warnings)
+- Consistent message formatting and user guidance
+
+**Navigation Standards**:
+- **ENTER**: Process current screen input
+- **F3**: Exit/Return to previous screen or main menu
+- **Clear**: Reset screen to initial state
+- **PA Keys**: Context-sensitive help and shortcuts
+
+**Data Validation**:
+- Client-side validation through BMS field attributes
+- Server-side validation in COBOL programs
+- Cross-field validation and business rule enforcement
+- Real-time feedback for user input errors
 
 <br/>
 
@@ -270,23 +549,114 @@ If you have questions or requests for improvement please raise an issue in the r
 
 <br/>
 
+## Modernization Use Cases
+
+### Legacy Code Patterns for Analysis
+
+CardDemo demonstrates common mainframe programming patterns that modernization tools need to analyze and transform:
+
+**1. COBOL Programming Constructs**
+- Traditional COBOL data structures with COMP and COMP-3 variables
+- PERFORM loops and conditional logic patterns
+- File I/O operations with VSAM datasets
+- COPY statement usage for shared data structures
+
+**2. CICS Transaction Processing Patterns**
+- Program-to-program communication using XCTL and COMMAREA
+- BMS map handling for screen I/O operations
+- CICS command usage for file operations and system services
+- Transaction context management and error handling
+
+**3. Data Access Patterns**
+- VSAM file organization and access methods
+- Cross-reference file relationships and data integrity
+- Batch vs. online data access patterns
+- Record locking and concurrency control
+
+**4. Batch Processing Workflows**
+- JCL job dependencies and execution sequences
+- Data transformation and validation processes
+- File backup and recovery procedures
+- Report generation and output management
+
+### Transformation Opportunities
+
+**Service Extraction**: Individual COBOL programs can be analyzed for business logic extraction and conversion to microservices.
+
+**API Development**: CICS transactions provide natural boundaries for REST API development with clear input/output interfaces.
+
+**Data Modernization**: VSAM file structures can be mapped to relational or NoSQL databases while preserving data relationships.
+
+**User Interface Modernization**: BMS maps provide screen layout and field definitions that can be transformed to modern web interfaces.
+
+**Workflow Automation**: JCL batch processing sequences can be converted to cloud-native workflow orchestration.
+
+### Modernization Strategies Demonstrated
+
+**1. Strangler Fig Pattern**: Gradual replacement of mainframe components while maintaining system functionality
+**2. Database Modernization**: Migration from VSAM to modern database systems
+**3. API-First Approach**: Exposing mainframe business logic through modern APIs
+**4. Cloud Migration**: Moving batch processing to cloud-native solutions
+**5. User Experience Modernization**: Replacing terminal-based interfaces with web applications
+
+## Development Patterns
+
+### COBOL Programming Patterns
+
+**Program Structure**: Standard IDENTIFICATION, ENVIRONMENT, DATA, and PROCEDURE divisions with consistent naming conventions.
+
+**Data Definition**: Use of copybooks for shared data structures, COMP variables for performance, and level-88 condition names for readability.
+
+**Error Handling**: Consistent RESP and RESP2 code checking for CICS operations with standardized error message handling.
+
+**Modular Design**: Separation of business logic, data access, and presentation layers with clear program interfaces.
+
+### CICS Programming Model
+
+**Transaction Design**: Each transaction handles a specific business function with clear entry and exit points.
+
+**Communication Areas**: Standardized COMMAREA structure for passing data between programs and maintaining session context.
+
+**Screen Handling**: BMS mapset usage for consistent screen layouts and user interaction patterns.
+
+**Resource Management**: Proper file opening/closing and resource cleanup in batch and online environments.
+
+### Data Management Patterns
+
+**VSAM File Design**: Key Sequenced Data Sets (KSDS) for efficient indexed access with alternate indexes for multiple access paths.
+
+**Data Relationships**: Cross-reference files maintaining referential integrity between customers, accounts, and cards.
+
+**Backup and Recovery**: Generation Data Groups (GDG) for maintaining historical data and backup copies.
+
+**Concurrency Control**: Record-level locking in CICS for data integrity in multi-user environments.
+
 ## Roadmap
 
-The following features are planned for upcoming releases
+### Planned Enhancements
 
-1. More database types
+**1. Database Integration**
+- **Relational Database Support**: Integration with Db2 for modern SQL access patterns
+- **Hierarchical Database**: IMS database calls for legacy data access scenarios
+- **NoSQL Integration**: Document database support for flexible data models
 
-   1. Relational Database usage : Db2 
-   
-   2. Hierachical database calls : IMS
+**2. Modern Integration Patterns**
+- **File Transfer Protocols**: FTP/SFTP integration for external data exchange
+- **Message Queue Integration**: MQ support for asynchronous processing and event-driven architecture
+- **API Gateway**: REST API exposure of mainframe transactions for distributed application integration
+- **Event Streaming**: Real-time data streaming for modern analytics and monitoring
 
-2. Integration
+**3. Cloud-Native Features**
+- **Containerization**: Docker support for portable deployment
+- **Microservices Architecture**: Service decomposition examples and patterns
+- **Observability**: Logging, monitoring, and tracing integration
+- **DevOps Integration**: CI/CD pipeline examples for mainframe applications
 
-   * ftp, sftp
-   
-   * Message queue integration
-   
-   * Exposure of transactions for distributed application integration
+**4. Modernization Tooling**
+- **Code Analysis**: Enhanced static analysis capabilities for transformation planning
+- **Migration Utilities**: Automated conversion tools for common modernization scenarios
+- **Testing Framework**: Comprehensive test harness for validation during transformation
+- **Documentation Generation**: Automated documentation from legacy code analysis
 
 <br/>
 
@@ -304,11 +674,24 @@ This is intended to be a community resource and it is released under the Apache 
 
 <br/>
 
-## Project status
+## Project Status
 
-We are planning a v2 of this application in Q1 2023.
+**Current Version**: v1.0 - Production Ready
 
-Watch this space for updates
+The CardDemo application is actively maintained and serves as a comprehensive reference implementation for mainframe modernization scenarios. The codebase demonstrates production-quality mainframe development patterns and is suitable for:
+
+- **Educational Use**: Learning mainframe technologies and programming patterns
+- **Modernization Planning**: Analyzing legacy code structures and transformation opportunities  
+- **Tool Development**: Testing and validating modernization tools and frameworks
+- **Proof of Concepts**: Demonstrating modernization approaches and integration patterns
+
+**Upcoming Enhancements**: 
+- Enhanced database integration (Db2, IMS)
+- Modern integration patterns (APIs, messaging)
+- Cloud-native deployment options
+- Advanced modernization tooling examples
+
+**Community Contributions**: We welcome contributions that enhance the application's value as a modernization learning resource. See the [Contributing](#contributing) section for guidelines.
 
 <br/>
 
